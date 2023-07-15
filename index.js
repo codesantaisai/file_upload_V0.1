@@ -1,3 +1,4 @@
+const { error } = require('console');
 const express = require('express');
 const app = express();
 const multer = require('multer');
@@ -43,6 +44,10 @@ app.get('/', (req, res) => {
 app.post('/upload', (req, res) => {
     upload(req, res, function(err){
         if (err) {
+            if(err instanceof multer.MulterError && err.code == "LIMIT_FILE_SIZE"){
+               return res.send("File Size Should be less than 2mb")
+            }
+            
             res.send(err)
         } else {
             res.send("Successfully File Uploaded")
